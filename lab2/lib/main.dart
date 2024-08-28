@@ -8,16 +8,36 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      home: ProfileInputScreen(),
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.teal,
-        body: SafeArea(
+    );
+  }
+}
+
+class ProfileInputScreen extends StatefulWidget {
+  @override
+  _ProfileInputScreenState createState() => _ProfileInputScreenState();
+}
+
+class _ProfileInputScreenState extends State<ProfileInputScreen> {
+  final _formKey = GlobalKey<FormState>();
+  String phoneNumber = '';
+  String email = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.teal,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               CircleAvatar(
                 radius: 50.0,
-                backgroundImage: AssetImage('images/avt.png'), // Replace with your image path
+                backgroundImage:
+                    AssetImage('images/avt.png'), // Update with your image path
               ),
               Text(
                 'Nguyễn Thành Công',
@@ -45,38 +65,73 @@ class MyApp extends StatelessWidget {
                   color: Colors.teal.shade100,
                 ),
               ),
-              Card(
-                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
-                child: ListTile(
-                  leading: Icon(
-                    Icons.phone,
-                    color: Colors.teal,
-                  ),
-                  title: Text(
-                    '+44 123 4567 8901',
-                    style: TextStyle(
-                      color: Colors.teal.shade900,
-                      fontFamily: 'Source Sans Pro',
-                      fontSize: 20.0,
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    Card(
+                      margin: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 25.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            icon: Icon(
+                              Icons.phone,
+                              color: Colors.teal,
+                            ),
+                            hintText: 'Enter your phone number',
+                            border: InputBorder.none,
+                          ),
+                          keyboardType: TextInputType.phone,
+                          onChanged: (value) {
+                            setState(() {
+                              phoneNumber = value;
+                            });
+                          },
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              Card(
-                margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
-                child: ListTile(
-                  leading: Icon(
-                    Icons.email,
-                    color: Colors.teal,
-                  ),
-                  title: Text(
-                    'congnt.21it@vku.udn.vn',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      color: Colors.teal.shade900,
-                      fontFamily: 'Source Sans Pro',
+                    Card(
+                      margin: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 25.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            icon: Icon(
+                              Icons.email,
+                              color: Colors.teal,
+                            ),
+                            hintText: 'Enter your email',
+                            border: InputBorder.none,
+                          ),
+                          keyboardType: TextInputType.emailAddress,
+                          onChanged: (value) {
+                            setState(() {
+                              email = value;
+                            });
+                          },
+                        ),
+                      ),
                     ),
-                  ),
+                    SizedBox(height: 20.0),
+                    ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            // Use the input data here
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      'Data submitted: $phoneNumber, $email')),
+                            );
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Submit'),
+                        )),
+                  ],
                 ),
               ),
             ],
